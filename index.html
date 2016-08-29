@@ -51,7 +51,15 @@ background-color: #f5f5f5;
 
 /* Custom page CSS
 -------------------------------------------------- */
+svg {
+	max-width: 100%;
+    display: inline-block;
+}
 
+#network {
+    margin-top: 60px;
+    text-align: center;
+}
 </style>
 	<title>Travis Lawrence</title>
 </head>
@@ -121,12 +129,14 @@ background-color: #f5f5f5;
 <script src="d3.min.js" charset="utf-8"></script>
 <script>
 var margin = {top: 30, right: 3, bottom: 30, left: 3},
-    width = parseInt(d3.select("#network").style("width"), 10),
-    width = width - margin.left - margin.right,
+    // width = parseInt(d3.select("#network").style("width"), 10),
+    // width = width - margin.left - margin.right,
+    width = 750,
     height = 400;
 var svg = d3.select("#network").append("svg")
     .attr("width", width)
-    .attr("height", height);
+    .attr("height", height)
+    .attr("viewBox", "0 0 " + width + " " + height);
 
 var force = d3.layout.force()
     .charge(-900)
