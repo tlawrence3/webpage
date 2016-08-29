@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+         
+         <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	 <!-- jQuery library -->
+	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+	 <!-- Latest compiled and minified CSS -->
+	 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+	 <!-- Optional theme -->
+	 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+	 <!-- Latest compiled and minified JavaScript -->
+	 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+	 <link rel="stylesheet" type="text/css" href="bootstrap-social.css">
+
+<style>
+.link {
+    stroke: #ccc;
+}
+
+.node text {
+    pointer-events: none;
+    font: 12px sans-serif;
+}
+/* Sticky footer styles
+-------------------------------------------------- */
+
+html
+{
+position: relative;
+min-height: 100%;
+/* The html and body elements cannot have any padding or margin. */
+}
+body {
+margin-bottom: 60px;
+}
+.footer {
+position: absolute;
+bottom: 0;
+width: 100%;
+height: 60px;
+background-color: #f5f5f5;
+}
+
+
+/* Custom page CSS
+-------------------------------------------------- */
+
+</style>
+	<title>Travis Lawrence</title>
+</head>
+	<body>
+		<nav class="navbar navbar-inverse navbar-fixed-top" style="background: rgba(0,0,0,0.61);">
+		  <div class="container-fluid">
+		    <div class="navbar-header">
+	              <a class="navbar-brand" href="#">Travis Lawrence</a>
+		    <button class="navbar-toggle" data-toggle = "collapse" data-target = ".navHeaderCollapse">
+			    <span class = "icon-bar"></span>
+			    <span class = "icon-bar"></span>
+			    <span class = "icon-bar"></span>
+		    
+		    </button>
+		    </div>
+		    <div class="collapse navbar-collapse navHeaderCollapse">
+		    <ul class="nav navbar-nav">
+			 <li class="active"><a href="http://travisjlawrence.com">Home</a></li>
+		         <li><a href="research.html">Research</a></li>
+		         <li><a href="pub.html">Publications</a></li>
+		         <li><a href="CV.pdf">CV</a></li>
+			 </ul>
+		    </div>
+		  </div>
+		  </nav> 
+		  <div class="container-fluid">
+		<div class="row">
+	        <div class="col*-12" id="network">
+		</div>
+		</div>
+		  </div>
+		<div class="container-fluid">
+		<div class="row">
+		<div class="col-md-12">
+			<p>I am currently a PhD candidate at University of California, Merced. My
+			research interests are in evolutionary biology mainly focused on 
+			phylogenetics/phylogenomics of difficult to resolve relationships, such as, rapid 
+			radiations and deep evolutionary relationships.</p>
+
+			<p>I am currently working on several questions: 1) resolving the relationship 
+			between the three domains of life Eukarya, Bacteria, Archaea. 2) The phylogenetic
+		        position of Gnetophyta within gymnosperms. 3) Identifying the cyanobacterial clade
+		        of the progenitor of chloroplast. 	
+			</p>
+
+		</div>
+		</div>
+		</div>
+		  <footer class="footer">
+	          <div class="container-fluid">
+	          <div class="row">
+		  <div class="text-center">
+			  <a class="btn btn-xs btn-social-icon btn-github" href="https://github.com/tlawrence3">
+				  <span class="fa fa-github"></span>
+			  </a>
+			  <a class="btn btn-xs btn-social-icon btn-twitter" href="https://twitter.com/phylophreak">
+			  <span class="fa fa-twitter"></span>
+			  </a>
+			  <a class="btn btn-xs btn-social-icon btn-google" href="mailto:tlawrence3@ucmerced.edu">
+			  <span class="fa fa-envelope"></span>
+			  </a>
+
+                  </div>
+		  </div>
+		  </div>
+		  </footer>
+<script src="d3.min.js" charset="utf-8"></script>
+<script>
+var margin = {top: 30, right: 3, bottom: 30, left: 3},
+    width = parseInt(d3.select("#network").style("width"), 10),
+    width = width - margin.left - margin.right,
+    height = 400;
+var svg = d3.select("#network").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+var force = d3.layout.force()
+    .charge(-900)
+    .linkDistance(160)
+    .size([width, height]);
+
+d3.json("pub.json", function(error, json) {
+  if (error) throw error;
+
+  force
+      .nodes(json.nodes)
+      .links(json.links)
+      .start();
+
+  var link = svg.selectAll(".link")
+      .data(json.links)
+      .enter().append("line")
+      .attr("class", "link")
+      .style("stoke-width", function(d) {return Math.sqrt(d.value); });
+
+  var node = svg.selectAll(".node")
+      .data(json.nodes)
+      .enter().append("g")
+      .attr("class", "node")
+      .call(force.drag);
+
+  node.append("circle")
+      .attr("r", 5)
+      .style("fill", "red")
+  
+      node.append("text")
+      .attr("dx", 12)
+      .attr("dy", ".35em")
+      .text(function(d) { return d.name });
+
+  force.on("tick", function() {
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+	.attr("x2", function(d) { return d.target.x; })
+	.attr("y2", function(d) { return d.target.y; });
+
+    node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+  });
+});
+</script>
+	</body>
+</html>
